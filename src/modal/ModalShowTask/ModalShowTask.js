@@ -26,20 +26,17 @@ import useParseDate from '../../hooks/parseDate';
 const ModalShowTask = ({ handleClose, currentTask, id }) => {
     const dispatch = useDispatch();
 
-    let labelColor =
-        currentTask?.status === 'in_progress'
-            ? 'orange'
-            : currentTask?.status === 'queue'
-            ? '#3e58eb'
-            : currentTask?.status === 'done'
-            ? '#22bb04'
-            : null;
-
     const options = [
         { value: '1', label: 'P1', color: 'lightblue' },
         { value: '2', label: 'P2', color: 'pink' },
         { value: '3', label: 'P3', color: '#9c9c9c' },
         { value: 'other', label: 'Другое' },
+    ];
+
+    const optionsStatus = [
+        { value: 'queue', label: 'В очереди', color: '#3e58eb' },
+        { value: 'in_progress', label: 'Выполняется', color: '#ffa500' },
+        { value: 'done', label: 'Завершена', color: '#22bb04' },
     ];
 
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -49,8 +46,11 @@ const ModalShowTask = ({ handleClose, currentTask, id }) => {
         currentTask?.description || ''
     );
     const [selected, setSelected] = useState(currentTask?.epic || '');
+    const [selectedStatus, setSelectedStatus] = useState(
+        currentTask?.status || ''
+    );
     const [selectedDate, setSelectedDate] = useState(
-        currentTask?.endDate || null
+        currentTask?.endDate || ''
     );
     const [files, setFiles] = useState(currentTask?.files || []);
     const [subtasks, setSubtasks] = useState(currentTask?.subtasks || []);
@@ -60,9 +60,17 @@ const ModalShowTask = ({ handleClose, currentTask, id }) => {
     const [commentValue, setCommentValue] = useState('');
 
     const startDate = useDateFormatter(new Date());
-    const endDate = useDateFormatter(selectedDate);
-    const currentTaskEndDate = useParseDate(currentTask?.endDate);
+    const endDate = selectedDate;
     const currTime = useTimeFormatter(new Date());
+
+    let labelColor =
+        selectedStatus === 'in_progress'
+            ? 'orange'
+            : selectedStatus === 'queue'
+            ? '#3e58eb'
+            : selectedStatus === 'done'
+            ? '#22bb04'
+            : null;
 
     const closeModal = () => {
         setIsEditMode(false);
@@ -84,6 +92,7 @@ const ModalShowTask = ({ handleClose, currentTask, id }) => {
                 description,
                 startDate: startDate,
                 endDate: endDate,
+                status: selectedStatus,
                 epic: selected,
                 projectId: id,
                 timeSpent,
@@ -163,13 +172,14 @@ const ModalShowTask = ({ handleClose, currentTask, id }) => {
             setTaskName(currentTask?.name);
             setDescription(currentTask?.description);
             setSelected(currentTask?.epic);
-            setSelectedDate(currentTaskEndDate || '');
+            setSelectedStatus(currentTask?.status);
+            setSelectedDate(currentTask?.endDate || '');
             setFiles(currentTask?.files || []);
             setSubtasks(currentTask?.subtasks || []);
             setTimeSpent(currentTask?.timeSpent || '');
             setComments(currentTask?.comments || []);
         }
-        console.log('Таск в модалке:', currentTask);
+        console.log('Таск Модалка', currentTask);
     }, [currentTask]);
 
     useEffect(() => {
@@ -229,7 +239,7 @@ const ModalShowTask = ({ handleClose, currentTask, id }) => {
                             className={styles.mobileClose}
                             onClick={closeModal}
                         >
-                            <CloseIcon size={20} fill={'black'} />
+                            <CloseIcon size={25} fill={'white'} />
                         </div>
                     )}
 
@@ -251,11 +261,11 @@ const ModalShowTask = ({ handleClose, currentTask, id }) => {
                                         borderColor: labelColor,
                                     }}
                                 >
-                                    {currentTask?.status === 'in_progress'
+                                    {selectedStatus === 'in_progress'
                                         ? 'Выполняется'
-                                        : currentTask?.status === 'queue'
+                                        : selectedStatus === 'queue'
                                         ? 'В очереди'
-                                        : currentTask?.status === 'done'
+                                        : selectedStatus === 'done'
                                         ? 'Завершена'
                                         : null}
                                 </label>
@@ -347,7 +357,17 @@ const ModalShowTask = ({ handleClose, currentTask, id }) => {
                                 className={styles.modalSelect}
                                 disabled={!isEditMode}
                             />
-                            <label>Выполнить до:</label>
+                            {isMobile && (
+                                <SelectApp
+                                    options={optionsStatus}
+                                    value={selectedStatus}
+                                    onChange={setSelectedStatus}
+                                    placeholder="Статус"
+                                    className={styles.modalSelectStatus}
+                                    disabled={!isEditMode}
+                                />
+                            )}
+                            <label>{`Выполнить до:`} </label>
                             <DatePicker
                                 selected={selectedDate}
                                 onChange={(date) => setSelectedDate(date)}
@@ -356,18 +376,19 @@ const ModalShowTask = ({ handleClose, currentTask, id }) => {
                                 dateFormat="dd.MM.yyyy"
                                 disabled={!isEditMode}
                             />
+
                             {files.length > 0 && (
                                 <div className={styles.filePreview}>
                                     <label>Прилагается:</label>
                                     {files.map((file, index) => (
                                         <a
                                             key={index}
-                                            href={`/uploads/${file.name}`}
+                                            href={`/uploads/${file}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className={styles.fileName}
                                         >
-                                            {cropFileName(file.name, 10)}
+                                            {cropFileName(file, 20)}
                                         </a>
                                     ))}
                                 </div>

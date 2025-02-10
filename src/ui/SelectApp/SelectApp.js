@@ -12,7 +12,6 @@ const SelectApp = ({
 }) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    // Найти выбранный option
     const selectedOption = options.find((option) => option.value === value);
 
     const handleSelect = (option) => {

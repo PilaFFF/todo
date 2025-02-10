@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { moveTask } from '../../store/projectsReducer';
@@ -14,6 +14,12 @@ import ModalShowTask from '../../modal/ModalShowTask/ModalShowTask';
 const TasksPage = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
+
+    const columns = {
+        queue: 'Очередь',
+        in_progress: 'Выполняется',
+        done: 'Завершена',
+    };
 
     const { projects } = useSelector((state) => state.projects);
 
@@ -58,11 +64,17 @@ const TasksPage = () => {
         dispatch(moveTask(taskId, newStatus));
     };
 
-    const columns = {
-        queue: 'Очередь',
-        in_progress: 'Выполняется',
-        done: 'Завершена',
-    };
+    useEffect(() => {
+        if (modalAddTaskVisible || modalShowTaskVisible) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [modalAddTaskVisible, modalShowTaskVisible]);
 
     return (
         <div className={styles.tasksPage}>
