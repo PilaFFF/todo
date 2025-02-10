@@ -1,0 +1,403 @@
+  .modalOverlay {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgba(0, 0, 0, 0.68);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    opacity: 0;
+      transform: translateY(-10px);
+      animation: fadeInSlideDown 0.2s ease-in-out forwards;
+
+      @keyframes fadeInSlideDown {
+          from {
+              opacity: 0;
+              transform: translateY(-10px);
+          }
+          to {
+              opacity: 1;
+              transform: translateY(0);
+          }
+      }
+
+    .modalContainer {
+      display: flex;
+      width: 100%;
+      max-width: 1000px;
+      max-height: 800px;
+
+
+      @media (max-width: 768px) {
+        align-items: center;
+        justify-content: center;
+        flex-direction: column-reverse;
+      }
+    }
+
+    .commentsSection {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      max-height: 100%;
+      background-color: var(--card-bg);
+      width: 30%;
+      border-radius: 8px 0px 0px 8px;
+      border: 1px solid white;
+
+      ::-webkit-scrollbar {
+        display: none;
+      }
+
+      scrollbar-width: none;
+
+        .commentsItems {
+          padding: 20px;
+        }
+
+        .commentsInputContainer {
+          display: flex;
+          position: sticky;
+          padding: 20px;
+          bottom: 0;
+          border-top: 1px solid white;
+          background-color: var(--card-bg);
+          flex-direction: row;
+          align-items: center;
+          gap: 5px;
+        }
+
+        .commentInput {
+          input {
+            font-size: 18px;
+          }
+        }
+
+      @media (max-width: 768px) {
+        width: 100%;
+        max-width: 360px;
+        border-radius: 0px 0px 8px 8px;
+        border: unset;
+      }
+    }
+
+    .modal {
+      position: relative;
+      padding: 40px;
+      width: 70%;
+      display: flex;
+      flex-direction: column;
+      background: var(--card-bg);
+      border: 1px solid white;
+      border-radius: 0px 8px 8px 0px;
+      gap: 10px;
+  
+      .mobileClose {
+        position: absolute;
+        left: 5px;
+        top: 5px;
+      }
+
+      .closeModal {
+        position: absolute;
+        width: 47px;
+        height: 47px;
+        background: rgba(255, 255, 255, 0.53);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        right: -50px;
+        top: 0px;
+        border-radius: 100px;
+        cursor: pointer;
+        transition: all 0.3s ease-in;
+  
+        &:hover {
+          opacity: 0.8;
+          transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            display: none;
+        }
+      }
+
+      .modalItems {
+        display: flex;
+        flex-direction: column;
+        background-color: var(--modal-items-bg);
+        color: var(--modal-items-text);
+        border-radius: 12px;
+        padding: 10px;
+        gap: 10px;
+
+        @media (max-width: 768px) {
+          
+          gap: 5px;
+        }
+      }
+
+      .modalLabel {
+        display: flex;
+        justify-content: space-between;
+        color: var(--modal-items-text);
+        gap: 10px;
+          label{
+            font-size: 24px;
+            font-weight: 600;
+
+            @media (max-width: 768px) {
+              font-size: 16px;
+            }
+          }
+      }
+
+      .inputsContainer {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .inputsContainerTitle {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        label {
+          border: 1px solid #ccc;
+          white-space: nowrap;
+          border-radius: 12px;
+          padding: 10px;
+          font-size: 24px;
+          font-weight: 500;
+          
+          @media (max-width: 768px) {
+            font-size: 16px;
+            padding: 5px;
+          }
+        }
+      }
+
+      .modalInput {
+            background-color: transparent;
+            border: 1px solid #ccc;
+            transition: border-color 0.2s ease-in-out;
+
+            &:hover {
+              border-color: #3e58eb;
+            }
+      }
+      
+      .detailsContainer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+        
+          .modalSelect {
+            width: 30%;
+            select {
+              padding: unset;
+            }
+
+          }
+
+          .datePicker {
+            padding: 11px;
+            background: transparent;
+            color: var(--modal-items-text);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+
+            &:hover {
+              border-color: #3e58eb;
+            }
+        }
+
+        @media (max-width: 768px) {
+          flex-direction: column;
+          justify-content: start;
+          align-items: start;
+          gap: 5px;
+        }
+      }
+
+      .filePreview { 
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: start;
+        padding: 11px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+
+        .fileName {
+          text-decoration: none;
+          color: rgb(25, 106, 255);
+        }
+
+      }
+
+      .buttonsContainer {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+
+        .trash {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #aa2d2d;
+          cursor: pointer;
+          padding: 20px;
+          border-radius: 100%;
+          width: 20px;
+          height: 20px;
+          transition: transform 0.1s ease, background-color 0.1s ease;
+
+          &:hover {
+            background-color: #962828;
+            transform: scale(1.1);
+          }
+
+          @media (max-width: 768px) {
+            padding: 10px;
+          }
+        }
+      }
+
+      .textarea {
+        height: 120px; 
+        resize: none; 
+        padding: 10px;
+        font-size: 16px;
+        background-color: transparent;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        outline: none;
+        margin-top: 10px;
+        color: var(--modal-items-text);
+        transition: border-color 0.2s ease-in-out;
+
+        &:hover {
+            border-color: #3e58eb;
+        }
+
+        @media (max-width: 768px) {
+          height: unset;
+        }
+      }
+
+      .subtaskContainer {
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+
+        @media (max-width: 768px) {
+          flex-direction: row;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 0px 5px;
+        }
+      }
+
+      .subtaskContainerLabel {
+        text-align: start;
+        font-size: 20px;
+        font-weight: 500;
+
+        @media (max-width: 768px) {
+          font-size: 18px;
+        }
+      }
+
+      .subtaskItem {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 5px;
+        border-radius: 8px;
+        gap: 10px;
+        white-space: wrap;
+        transition: background-color 0.2s ease-in-out;
+
+        &:hover {
+          background-color: var(--project-hover-bg);
+        }
+      }
+
+      .subtaskName {
+        word-wrap: break-word; 
+        overflow-wrap: break-word; 
+        white-space: normal;
+        max-width: 90%;
+        text-align: start;
+        line-height: 16px;
+        font-size: 18px;
+
+        @media (max-width: 768px) {
+          font-size: 16px;
+        }
+      }
+
+      .removeSubtask {
+        display: flex;
+        cursor: pointer;
+      }
+      
+      .subtaskInput {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .inputContainer {
+        background-color: transparent;
+        border: 1px solid #ccc;
+        transition: border-color 0.2s ease-in-out;
+
+        input {
+          padding: 10px;
+          font-size: 18px;
+
+          @media (max-width: 768px) {
+            padding: 5px;
+          }
+        }
+
+        &:hover {
+          border-color: #3e58eb;
+        }
+
+      }
+
+      .addButton {
+        cursor: pointer;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+      }
+
+      @media (max-width: 768px) {
+        width: 100%;
+        padding: 20px;
+        max-width: 320px;
+        border-radius: 8px 8px 0px 0px;
+        border: unset;
+      }
+    }
+
+    @media (max-width: 768px) {
+      align-items: start;
+    }
+  }
+  

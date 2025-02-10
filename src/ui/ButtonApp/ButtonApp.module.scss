@@ -1,0 +1,26 @@
+.container {
+    display: flex;
+    justify-content: center;
+
+    & .button {
+        display: flex;
+        align-items: center;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 20px 40px;
+        font-size: 20px;
+        border-radius: 100px;
+        background-color: var(--button-bg);
+        z-index: auto;
+        transition: background-color 0.1s ease;
+        &:hover {
+            background-color: #3348c2;
+        }
+
+        @media (max-width: 768px) {
+            padding: 10px 20px;
+            font-size: 18px;
+        }
+    }
+}

@@ -1,0 +1,45 @@
+.draggableContainer {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    border: 1px  solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    transition: border-color 0.2s ease;
+
+    &:hover {
+        border-color: #333;
+
+    }
+}
+
+.draggableIcon {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+
+    .draggableIconItem {
+        fill: black; 
+        transition: filter 0.3s ease; 
+    }
+
+    &:hover .draggableIconItem {
+        filter: drop-shadow(10px 10px 4px rgba(255, 255, 255, 1)); 
+    }
+}
+
+.taskCard {
+    background-color: #cfc9cc;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}

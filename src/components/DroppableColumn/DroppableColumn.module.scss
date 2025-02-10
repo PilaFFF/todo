@@ -1,0 +1,17 @@
+.column {
+    width: 30%;
+    background: #828a93;
+    padding: 15px;
+    border-radius: 5px;
+    min-height: 200px;
+
+    @media (max-width: 768px) {
+        width: unset;
+        margin: 15px;
+    }
+}
+
+.columnLabel {
+    font-size: 26px;
+    font-weight: 700;
+}

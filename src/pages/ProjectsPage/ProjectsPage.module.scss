@@ -1,0 +1,32 @@
+body {
+    background-color: var(--body-bg);
+    transition: background-color 0.1s ease;
+}
+
+.projectsPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 89.6vh;
+    padding: 50px;
+
+    .projectCard {
+        transition: transform 0.1s ease-out;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .addButton {
+        cursor: pointer;
+        transition: transform 0.1s ease;
+        
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 20px
+    }
+}

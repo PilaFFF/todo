@@ -1,0 +1,41 @@
+:root {
+  --body-bg: #ccc;
+  --project-bg: white;
+  --card-bg: #afb9bf; /*#ccc*/
+  --modal-items-bg: #dadfdf; /*white*/
+  --button-bg: #3e58eb;
+  --modal-project-bg: #afb9bf;
+  --modal-items-text: black;
+  --project-hover-bg: #ccc;
+  --text-color: #333;
+  --reply-color: #006ce7;
+  --theme-shadow: black;
+}
+
+.dark-theme {
+  --body-bg: #333;
+  --project-bg: #494949;
+   --card-bg: #333;
+  --modal-project-bg: #333;
+  --modal-items-bg: #494949;
+  --button-bg: #2f42b3;
+  --modal-items-text: white;
+  --project-hover-bg: #555;
+  --text-color: white;
+  --theme-shadow: goldenrod;
+}
+
+.change-theme {
+  position: absolute;
+  right: 50px;
+  top: 10px;
+  transition: transform 0.1s ease-in-out;
+  border-radius: 12px;
+  border: 1px solid var(--theme-shadow);
+  padding: 5px;
+  box-shadow: 2px 2px 2px 2px var(--theme-shadow);
+}
+
+.change-theme:hover {
+  transform: scale(1.1);
+}

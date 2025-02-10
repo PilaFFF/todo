@@ -1,0 +1,97 @@
+.wrapper {
+    width: 100%;
+    position: relative;
+
+    .select {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: transparent;
+        cursor: pointer;
+        transition: border-color 0.2s ease-in-out;
+
+        & .arrow {
+			transition: transform 0.3s ease;
+            transform: rotate(180deg);
+			user-select: none;
+			cursor: pointer;
+		}
+		& .active {
+            transition: transform 0.3s ease;
+			user-select: none;
+			cursor: pointer;
+		}
+
+        &:hover {
+            border-color: #3e58eb;
+        }
+    }
+
+    .selectedValue {
+        display: flex;
+        align-items: center;
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .optionColor {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+    }
+
+    .optionsContainer {
+        position: absolute;
+        background: var(--modal-items-bg);
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-top: 5px;
+        padding: 5px 0;
+        list-style: none;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 1000;
+
+        opacity: 0;
+        transform: translateY(-10px);
+        animation: fadeInSlideDown 0.2s ease-in-out forwards;
+
+        @keyframes fadeInSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .option {
+            display: flex;
+            padding: 10px;
+            cursor: pointer;
+            align-items: center;
+            transition: background 0.2s;
+
+            .optionColor {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                margin-right: 8px;
+            }
+
+            &:hover {
+                background: var(--project-hover-bg);
+            }
+        }
+    }
+}

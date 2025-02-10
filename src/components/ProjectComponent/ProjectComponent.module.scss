@@ -1,0 +1,39 @@
+.projectComponentWrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 10px;
+}
+
+.project {
+    display: flex;
+    padding: 20px;
+    width: 100%;
+    justify-content: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text-color);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    background-color: var(--project-bg);
+
+    
+    &:hover {
+        transform: scale(1.03);
+        background-color: var(--project-hover-bg);
+    }
+
+    @media (max-width: 768px) {
+        font-size: 16px;
+    }
+}
+
+.removeProject {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}

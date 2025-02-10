@@ -1,0 +1,59 @@
+.comment {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    padding: 10px;
+    gap: 5px;
+}
+
+.commentHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+
+.commentAuthor {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.commentTime {
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.commentBody {
+    text-align: start;
+    color: var(--text-color);
+}
+
+.commentActions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.commentReply {
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--reply-color);
+
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: #004da5;
+    }
+}
+
+.commentDelete {
+    cursor: pointer;
+    font-weight: 500;
+    color: rgb(179, 3, 3);
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: rgb(129, 0, 0);
+    }
+}

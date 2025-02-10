@@ -1,0 +1,41 @@
+.timeContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border 0.2s ease;
+    padding-top: 5px;
+    font-size: 18px;
+    gap: 5px;
+    &:hover {
+        border-color: #3e58eb;
+    }
+
+    @media (max-width: 768px) {
+        padding: 5px;
+        font-size: 16px;
+    }
+}
+
+.timeInput {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    width: 30px;
+    font-size: 18px;
+    background-color: transparent;
+    color: var(--modal-items-text);
+    outline: none;
+
+    &:hover {
+        border-color: #3e58eb;
+    }
+
+    @media (max-width: 768px) {
+        padding: 5px;
+        font-size: 16px;
+    }
+}
