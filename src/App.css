@@ -10,6 +10,7 @@
   --text-color: #333;
   --reply-color: #006ce7;
   --theme-shadow: black;
+  --placeholder-color: 'black'
 }
 
 .dark-theme {
@@ -23,6 +24,7 @@
   --project-hover-bg: #555;
   --text-color: white;
   --theme-shadow: goldenrod;
+  --placeholder-color: 'white'
 }
 
 .change-theme {
