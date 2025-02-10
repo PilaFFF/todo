@@ -38,7 +38,9 @@ const ModalAddTask = ({ handleClose, id }) => {
     const [taskNumber, setTaskNumber] = useState(null);
 
     const startDate = useDateFormatter(new Date());
-    const endDate = useDateFormatter(selectedDate);
+    const endDate = selectedDate;
+
+    console.log('startDate', startDate, endDate);
 
     const closeModal = () => {
         setTaskName('');
@@ -63,7 +65,7 @@ const ModalAddTask = ({ handleClose, id }) => {
                 endDate: endDate,
                 epic: selected,
                 projectId: id,
-                files: files.length > 0 ? files : null,
+                files: files.length > 0 ? files : [],
                 subtasks,
                 comments: [],
             })
@@ -82,18 +84,10 @@ const ModalAddTask = ({ handleClose, id }) => {
     ];
 
     const handleFileChange = (fileItems) => {
-        const validFiles = [];
+        const validFiles = fileItems.map((fileItem) => fileItem.file.name);
 
-        fileItems.forEach((fileItem) => {
-            if (allowedFormats.includes(fileItem.file.type)) {
-                validFiles.push(fileItem.file);
-            } else {
-                setError(
-                    'Можно загружать только .doc, .png, .jpg, .gif, .pdf, .txt'
-                );
-            }
-        });
         console.log('validFiles', validFiles);
+
         setFiles(validFiles);
     };
 
@@ -158,6 +152,14 @@ const ModalAddTask = ({ handleClose, id }) => {
                         {!isMobile && (
                             <FilePond
                                 files={files}
+                                acceptedFileTypes={[
+                                    'image/png',
+                                    'image/jpeg',
+                                    'image/gif',
+                                    'application/pdf',
+                                    'text/plain',
+                                    'application/msword',
+                                ]}
                                 onupdatefiles={handleFileChange}
                                 allowMultiple={true}
                                 maxFiles={3}
