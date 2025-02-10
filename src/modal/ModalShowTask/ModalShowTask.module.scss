@@ -298,6 +298,11 @@
             border-color: #3e58eb;
         }
 
+        &::placeholder {
+          font-size: 18px;
+          color: var(--placeholder-color);
+        }
+
         @media (max-width: 768px) {
           height: unset;
         }
