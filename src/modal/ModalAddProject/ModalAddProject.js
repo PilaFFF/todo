@@ -9,7 +9,7 @@ import { addProject } from '../../store/projectsReducer';
 const ModalAddProject = ({ visible, handleClose }) => {
     const dispatch = useDispatch();
 
-    const [projectName, setProjectName] = useState(''); // дать props type string
+    const [projectName, setProjectName] = useState('');
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     const handleClickBtn = () => {
