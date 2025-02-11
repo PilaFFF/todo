@@ -32,15 +32,13 @@ function App() {
     return (
         <div className="App">
             <BrowserRouter>
-                {!isMobile && (
-                    <div className="change-theme" onClick={toggleTheme}>
-                        {theme === 'dark' ? (
-                            <Sun size={30} fill="#ffc83d" />
-                        ) : (
-                            <Moon size={30} />
-                        )}
-                    </div>
-                )}
+                <div className="change-theme" onClick={toggleTheme}>
+                    {theme === 'dark' ? (
+                        <Sun size={30} fill="#ffc83d" />
+                    ) : (
+                        <Moon size={30} />
+                    )}
+                </div>
 
                 <AppRoutes />
             </BrowserRouter>

@@ -10,6 +10,7 @@ const InputApp = ({
     className,
     classNameContainer,
     disabled,
+    handleKeyDown,
 }) => {
     return (
         <div className={`${styles.wrapper} ${className || ''}`}>
@@ -25,6 +26,7 @@ const InputApp = ({
                     onChange={onChange}
                     placeholder={placeholder}
                     className={styles.input}
+                    onKeyDown={handleKeyDown}
                     type={type ? type : 'text'}
                     disabled={disabled}
                 />

@@ -10,6 +10,25 @@ body {
     height: 89.6vh;
     padding: 50px;
 
+    &::before {
+        content: "TODO";
+        position: absolute;
+        transform: translate(-0%, -40%);
+        font-size: 20vw; 
+        font-weight: bold;
+        font-style: italic;
+        color: rgba(0, 0, 0, 0.4); 
+        white-space: nowrap;
+        z-index: -1;
+    }
+
+    @media (max-width: 768px) {
+        &::before {
+            transform: translate(-0%, -20vh);
+            font-size: 35vw; 
+        } 
+    }
+
     .projectCard {
         transition: transform 0.1s ease-out;
         width: 100%;
