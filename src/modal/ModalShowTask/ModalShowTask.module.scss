@@ -47,18 +47,22 @@
       width: 30%;
       border-radius: 8px 0px 0px 8px;
       border: 1px solid white;
-
+  
       ::-webkit-scrollbar {
-        display: none;
+          display: none;
       }
-
+  
       scrollbar-width: none;
-
-        .commentsItems {
+  
+      .commentsItems {
           padding: 20px;
-        }
-
-        .commentsInputContainer {
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
+          justify-content: flex-start;
+      }
+  
+      .commentsInputContainer {
           display: flex;
           position: sticky;
           padding: 20px;
@@ -68,18 +72,18 @@
           flex-direction: row;
           align-items: center;
           gap: 5px;
-        }
-
-        .commentInput {
-          input {
-            font-size: 18px;
-          }
-        }
-
-      @media (max-width: 768px) {
-        display: none;
       }
-    }
+  
+      .commentInput {
+          input {
+              font-size: 18px;
+          }
+      }
+  
+      @media (max-width: 768px) {
+          display: none;
+      }
+  }
 
     .modal {
       position: relative;

@@ -21,7 +21,6 @@ import CheckBox from '../../ui/CheckBox/CheckBox';
 import TimeTracker from '../../components/TimeTrack/TimeTrack';
 import Comment from '../../components/Comment/Comment';
 import useTimeFormatter from '../../hooks/timeFormatter';
-import useParseDate from '../../hooks/parseDate';
 
 const ModalShowTask = ({ handleClose, currentTask, id }) => {
     const dispatch = useDispatch();
@@ -167,6 +166,13 @@ const ModalShowTask = ({ handleClose, currentTask, id }) => {
         setCommentValue('');
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSendComment();
+        }
+    };
+
     useEffect(() => {
         if (currentTask) {
             setTaskName(currentTask?.name);
@@ -179,7 +185,7 @@ const ModalShowTask = ({ handleClose, currentTask, id }) => {
             setTimeSpent(currentTask?.timeSpent || '');
             setComments(currentTask?.comments || []);
         }
-        console.log('Таск Модалка', currentTask);
+        console.log('Таск в модалке', currentTask);
     }, [currentTask]);
 
     useEffect(() => {
@@ -215,6 +221,7 @@ const ModalShowTask = ({ handleClose, currentTask, id }) => {
                             onChange={(e) => setCommentValue(e.target.value)}
                             placeholder="Комментарий ..."
                             classNameContainer={styles.commentInput}
+                            handleKeyDown={handleKeyDown}
                         />
                         <div
                             className={styles.sendMessage}
