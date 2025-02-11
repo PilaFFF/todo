@@ -422,6 +422,12 @@
         border-radius: 8px;
         border: unset;
       }
+
+      @media (min-width: 769px) and (max-width: 1279px) {
+        padding: 20px;
+        max-width: 700px;
+        max-height: 500px;
+      }
     }
   }
   
