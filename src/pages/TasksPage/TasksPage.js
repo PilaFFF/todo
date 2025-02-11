@@ -95,11 +95,9 @@ const TasksPage = () => {
                 />
             )}
 
-            <div className={styles.taskPageLabelContainer}>
-                <h2
-                    className={styles.taskPageLabel}
-                >{`"${currentProject?.name}"`}</h2>
-            </div>
+            <h2
+                className={styles.taskPageLabel}
+            >{`"${currentProject?.name}"`}</h2>
 
             <div className={styles.searchContainer}>
                 <InputApp

@@ -9,19 +9,8 @@
     justify-content: center;
     align-items: center;
     backdrop-filter: blur(10px);
-  
-    .modal {
-      position: relative;
-      padding: 40px;
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      flex-direction: column;
-      background: var(--card-bg);
-      border-radius: 8px;
-      gap: 10px;
 
-      opacity: 0;
+    opacity: 0;
       transform: translateY(-10px);
       animation: fadeInSlideDown 0.2s ease-in-out forwards;
 
@@ -35,6 +24,20 @@
               transform: translateY(0);
           }
       }
+
+    .modal {
+      position: relative;
+      padding: 40px;
+      width: 100%;
+      max-width: 800px;
+      max-height: 800px;
+      display: flex;
+      flex-direction: column;
+      background: var(--card-bg);
+      border-radius: 8px;
+      gap: 10px;
+
+     
   
       .mobileClose {
         position: absolute;
@@ -69,6 +72,7 @@
       .modalItems {
         display: flex;
         flex-direction: column;
+        max-height: 80%;
         background-color: var(--modal-items-bg);
         color: var(--modal-items-text);
         border-radius: 12px;
@@ -94,6 +98,8 @@
       .inputsContainer {
         display: flex;
         flex-direction: column;
+        max-height: 100%;
+        overflow: hidden;
         gap: 5px;
 
         .modalInput {
@@ -165,8 +171,17 @@
 
       .subtaskContainer {
         display: flex;
+        max-height: 200px;
+        overflow: hidden;
+        overflow-y: auto;
         gap: 10px;
         flex-direction: column;
+
+        ::-webkit-scrollbar {
+          display: none;
+        }
+  
+        scrollbar-width: none;
 
         @media (max-width: 768px) {
           flex-direction: row;
