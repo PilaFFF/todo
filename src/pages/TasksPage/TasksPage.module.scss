@@ -12,10 +12,11 @@ body {
     width: 100%;
     padding: 30px 10px 10px 10px;
 }
+
 .taskPageLabel {
     color: var(--text-color);
     font-size: 32px;
-    width: 95%;
+    margin-top: 60px;
 }
 
 .addTask {
@@ -35,9 +36,9 @@ body {
     justify-content: center;
     padding-bottom: 10px;
 
-    .searchInput{
+    .searchInput {
         width: unset;
-
+        
         @media (max-width: 768px) {
             width: 80%;
         }
