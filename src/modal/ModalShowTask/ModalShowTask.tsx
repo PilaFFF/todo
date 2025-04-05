@@ -1,0 +1,460 @@
+import { FC, useEffect, useState } from 'react';
+import styles from './ModalShowTask.module.scss';
+import CloseIcon from '../../assets/icons/CloseIcon';
+import TrashIcon from '../../assets/icons/TrashIcon';
+import SendMessage from '../../assets/icons/SendMessage';
+import CircledPLus from '../../assets/icons/CircledPlus';
+import InputApp from '../../ui/InputApp/InputApp';
+import ButtonApp from '../../ui/ButtonApp/ButtonApp';
+import { useDispatch } from 'react-redux';
+import { IComment, Subtask, Task } from '../../store/projectsReducer';
+import SelectApp from '../../ui/SelectApp/SelectApp';
+import useDateFormatter from '../../hooks/dateFormatter';
+import CheckBox from '../../ui/CheckBox/CheckBox';
+import TimeTracker from '../../components/TimeTrack/TimeTrack';
+import useTimeFormatter from '../../hooks/timeFormatter';
+import Comment from '../../components/Comment/Comment';
+import { DatePicker, DatePickerProps } from 'antd';
+import dayjs from 'dayjs';
+
+interface IModalShowTaskProps {
+    handleClose: () => void;
+    currentTask: Task;
+    id: string;
+}
+
+const ModalShowTask: FC<IModalShowTaskProps> = ({
+    handleClose,
+    currentTask,
+    id,
+}) => {
+    const dispatch = useDispatch();
+
+    const options = [
+        { value: '1', label: 'P1', color: 'lightblue' },
+        { value: '2', label: 'P2', color: 'pink' },
+        { value: '3', label: 'P3', color: '#9c9c9c' },
+        { value: 'other', label: 'Другое' },
+    ];
+
+    const optionsStatus = [
+        { value: 'queue', label: 'В очереди', color: '#3e58eb' },
+        { value: 'in_progress', label: 'Выполняется', color: '#ffa500' },
+        { value: 'done', label: 'Завершена', color: '#22bb04' },
+    ];
+
+    const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 768);
+    const [isEditMode, setIsEditMode] = useState<boolean>(false);
+    const [taskName, setTaskName] = useState<string>(currentTask?.title || '');
+    const [description, setDescription] = useState<string>(
+        currentTask?.description || ''
+    );
+    const [selected, setSelected] = useState<string>(currentTask?.epic || '');
+    const [selectedStatus, setSelectedStatus] = useState<string>(
+        currentTask?.status || ''
+    );
+    const [selectedDate, setSelectedDate] = useState<string>(
+        currentTask?.endDate || ''
+    );
+    const [files, setFiles] = useState<File[]>(currentTask?.files || []);
+    const [subtasks, setSubtasks] = useState<Subtask[]>(
+        currentTask?.subtasks || []
+    );
+    const [subtaskName, setSubtaskName] = useState<string>('');
+    const [timeSpent, setTimeSpent] = useState<number>(
+        currentTask?.timeSpent || 0
+    );
+    const [comments, setComments] = useState<IComment[]>(
+        currentTask?.comments || []
+    );
+    const [commentValue, setCommentValue] = useState<string>('');
+
+    const startDate = useDateFormatter(new Date());
+    const endDate = selectedDate;
+    const currTime = useTimeFormatter(new Date());
+
+    let labelColor =
+        selectedStatus === 'in_progress'
+            ? 'orange'
+            : selectedStatus === 'queue'
+            ? '#3e58eb'
+            : selectedStatus === 'done'
+            ? '#22bb04'
+            : undefined;
+
+    const closeModal = () => {
+        setIsEditMode(false);
+        handleClose();
+    };
+
+    const cropFileName = (name: string, maxLength = 20) => {
+        if (name?.length > maxLength) {
+            return name?.substring(0, maxLength) + '...';
+        }
+        return name;
+    };
+
+    const handleSave = () => {
+        dispatch({
+            type: 'UPDATE_TASK',
+            payload: {
+                id: currentTask?.id,
+                title: taskName,
+                description,
+                startDate: startDate,
+                endDate: endDate,
+                status: selectedStatus,
+                epic: selected,
+                projectId: id,
+                timeSpent,
+                subtasks,
+                comments,
+            },
+        });
+        setIsEditMode(false);
+    };
+
+    const handleRemove = () => {
+        dispatch({ type: 'REMOVE_TASK', payload: currentTask?.id });
+        setIsEditMode(false);
+        handleClose();
+    };
+
+    const handleAddSubtask = () => {
+        if (subtaskName.trim()) {
+            setSubtasks([
+                ...subtasks,
+                {
+                    id: String(Date.now()),
+                    taskId: currentTask?.id,
+                    name: subtaskName.trim(),
+                    completed: false,
+                },
+            ]);
+            setSubtaskName('');
+        }
+    };
+
+    const handleToggleSubtask = (id: string) => {
+        const index = subtasks.findIndex((subtask) => subtask.id === id);
+        if (index !== -1) {
+            const updatedSubtasks = [...subtasks];
+            updatedSubtasks[index] = {
+                ...updatedSubtasks[index],
+                completed: !updatedSubtasks[index].completed,
+            };
+            setSubtasks(updatedSubtasks);
+
+            const updatedSubtask = updatedSubtasks[index];
+            dispatch({
+                type: 'UPDATE_SUBTASK_STATUS',
+                payload: { taskId: currentTask.id, updatedSubtask },
+            });
+        }
+    };
+
+    const handleRemoveSubtask = (index: number) => {
+        setSubtasks(subtasks.filter((_, i) => i !== index));
+    };
+
+    const handleSendComment = () => {
+        if (!commentValue.trim()) return;
+
+        const comment = {
+            id: String(Date.now()),
+            text: commentValue,
+            author: 'User',
+            time: currTime,
+            taskId: currentTask?.id,
+        };
+
+        setComments([...comments, comment]);
+        dispatch({
+            type: 'ADD_COMMENT',
+            payload: { taskId: currentTask?.id, comment },
+        });
+        setCommentValue('');
+    };
+
+    const handleRemoveComment = (id: string) => {
+        setComments(comments.filter((comment) => comment.id !== id));
+        dispatch({
+            type: 'REMOVE_COMMENT',
+            payload: { taskId: currentTask?.id, commentId: id },
+        });
+        setCommentValue('');
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSendComment();
+        }
+    };
+
+    const handlePickDate: DatePickerProps['onChange'] = (dateString) => {
+        setSelectedDate(String(dateString));
+        handleSave();
+    };
+
+    useEffect(() => {
+        if (currentTask) {
+            setTaskName(currentTask?.title);
+            setDescription(currentTask?.description || '');
+            setSelected(currentTask?.epic || '');
+            setSelectedStatus(currentTask?.status);
+            setSelectedDate(currentTask?.endDate || '');
+            setFiles(currentTask?.files || []);
+            setSubtasks(currentTask?.subtasks || []);
+            setTimeSpent(currentTask?.timeSpent || 0);
+            setComments(currentTask?.comments || []);
+        }
+        console.log('Таск в модалке', currentTask);
+    }, [currentTask]);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return (
+        <div className={styles.modalOverlay}>
+            <div className={styles.modalContainer}>
+                <div className={styles.commentsSection}>
+                    <div className={styles.commentsItems}>
+                        {comments?.map((comment: IComment) => {
+                            return (
+                                <div key={comment?.id}>
+                                    <Comment
+                                        comment={comment}
+                                        onClick={() =>
+                                            handleRemoveComment(comment?.id)
+                                        }
+                                    />
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    <div className={styles.commentsInputContainer}>
+                        <InputApp
+                            value={commentValue}
+                            onChange={(e) => setCommentValue(e.target.value)}
+                            placeholder="Комментарий ..."
+                            classNameContainer={styles.commentInput}
+                            handleKeyDown={handleKeyDown}
+                        />
+                        <div
+                            className={styles.sendMessage}
+                            onClick={handleSendComment}
+                        >
+                            <SendMessage size={40} />
+                        </div>
+                    </div>
+                </div>
+                <div className={styles.modal}>
+                    <div className={styles.closeModal} onClick={closeModal}>
+                        <CloseIcon size={20} fill={'white'} />
+                    </div>
+
+                    <div className={styles.modalLabel}>
+                        <label>{`Задача № ${currentTask?.id}`}</label>
+                        <label>{`Создана: ${currentTask?.startDate}`}</label>
+                    </div>
+
+                    {isMobile && (
+                        <div
+                            className={styles.mobileClose}
+                            onClick={closeModal}
+                        >
+                            <CloseIcon size={25} fill={'white'} />
+                        </div>
+                    )}
+
+                    <div className={styles.modalItems}>
+                        <div className={styles.inputsContainer}>
+                            <div className={styles.inputsContainerTitle}>
+                                <InputApp
+                                    value={taskName}
+                                    onChange={(e) =>
+                                        setTaskName(e.target.value)
+                                    }
+                                    placeholder="Название задачи"
+                                    classNameContainer={styles.modalInput}
+                                    disabled={!isEditMode}
+                                />
+                                <label
+                                    style={{
+                                        color: labelColor,
+                                        borderColor: labelColor,
+                                    }}
+                                >
+                                    {selectedStatus === 'in_progress'
+                                        ? 'Выполняется'
+                                        : selectedStatus === 'queue'
+                                        ? 'В очереди'
+                                        : selectedStatus === 'done'
+                                        ? 'Завершена'
+                                        : null}
+                                </label>
+                            </div>
+
+                            <textarea
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                placeholder="Описание задачи"
+                                className={styles.textarea}
+                                disabled={!isEditMode}
+                            />
+                            {subtasks && (
+                                <div className={styles.subtaskContainer}>
+                                    <label
+                                        className={styles.subtaskContainerLabel}
+                                    >
+                                        Подзадачи:
+                                    </label>
+                                    {subtasks?.map((subtask, index) => (
+                                        <div
+                                            key={index}
+                                            className={styles.subtaskItem}
+                                        >
+                                            <CheckBox
+                                                checked={subtask?.completed}
+                                                onChange={() =>
+                                                    handleToggleSubtask(
+                                                        subtask?.id
+                                                    )
+                                                }
+                                            />
+                                            <span
+                                                className={styles.subtaskName}
+                                            >
+                                                {subtask.name}
+                                            </span>
+                                            {isEditMode && (
+                                                <div
+                                                    className={
+                                                        styles.removeSubtask
+                                                    }
+                                                    onClick={() =>
+                                                        handleRemoveSubtask(
+                                                            index
+                                                        )
+                                                    }
+                                                >
+                                                    <TrashIcon
+                                                        size={15}
+                                                        fill="red"
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {isEditMode && (
+                                        <div className={styles.subtaskInput}>
+                                            <InputApp
+                                                value={subtaskName}
+                                                onChange={(e) =>
+                                                    setSubtaskName(
+                                                        e.target.value
+                                                    )
+                                                }
+                                                classNameContainer={
+                                                    styles.inputContainer
+                                                }
+                                                placeholder="Добавить подзадачу"
+                                            />
+                                            <CircledPLus
+                                                size={!isMobile ? 45 : 35}
+                                                onClick={handleAddSubtask}
+                                                className={styles.addButton}
+                                                fill={'#3e58eb'}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className={styles.detailsContainer}>
+                            <SelectApp
+                                options={options}
+                                value={selected}
+                                onChange={setSelected}
+                                placeholder="Эпик"
+                                className={styles.modalSelect}
+                                disabled={!isEditMode}
+                            />
+                            {isMobile && (
+                                <SelectApp
+                                    options={optionsStatus}
+                                    value={selectedStatus}
+                                    onChange={setSelectedStatus}
+                                    placeholder="Статус"
+                                    className={styles.modalSelectStatus}
+                                    disabled={!isEditMode}
+                                />
+                            )}
+                            <div>
+                                <label>{`Выполнить до:`} </label>
+                                <DatePicker
+                                    value={dayjs(selectedDate)}
+                                    style={{
+                                        backgroundColor: '#dadfdf',
+                                        borderColor: '#ccc',
+                                    }}
+                                    onChange={handlePickDate}
+                                />
+                            </div>
+
+                            {files.length > 0 && (
+                                <div className={styles.filePreview}>
+                                    <label>Прилагается:</label>
+                                    {files.map((file, index) => (
+                                        <a
+                                            key={index}
+                                            href={`/uploads/${file}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={styles.fileName}
+                                        >
+                                            {cropFileName(file?.name, 20)}
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <TimeTracker
+                            time={timeSpent}
+                            setTime={setTimeSpent}
+                            handleSave={handleSave}
+                        />
+                    </div>
+
+                    <div className={styles.buttonsContainer}>
+                        <ButtonApp
+                            title={
+                                isEditMode
+                                    ? 'Сохранить изменения'
+                                    : 'Редактировать'
+                            }
+                            onClick={
+                                isEditMode
+                                    ? handleSave
+                                    : () => setIsEditMode(true)
+                            }
+                        />
+                        <div className={styles.trash} onClick={handleRemove}>
+                            <TrashIcon size={20} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default ModalShowTask;

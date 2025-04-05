@@ -9,12 +9,14 @@
     transition: border 0.2s ease;
     padding-top: 5px;
     font-size: 18px;
-    gap: 5px;
+    gap: 50px;
     &:hover {
         border-color: #3e58eb;
     }
 
     @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 0px;
         padding: 5px;
         font-size: 16px;
     }
